@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="35dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.HomeFragment">
+
+    <Button
+        android:id="@+id/btn_car"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/car"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/btn_5t_truck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/_5t_truck"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_car"/>
+
+    <Button
+        android:id="@+id/btn_10t_truck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/_10t_truck"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_5t_truck"/>
+
+    <Button
+        android:id="@+id/btn_tipper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tipper"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_10t_truck"/>
+
+    <Button
+        android:id="@+id/btn_articulated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/articulated"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_tipper"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

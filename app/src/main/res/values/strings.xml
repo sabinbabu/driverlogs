@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">DriverLogs</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="car">CAR</string>
+    <string name="_5t_truck">5T TRUCK</string>
+    <string name="_10t_truck">10T TRUCK</string>
+    <string name="tipper">TIPPER</string>
+    <string name="articulated">ARTICULATED</string>
+    <string name="driver">Driver : </string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="home">Home</string>
+    <string name="show_log_entries">Show Log Entries</string>
+    <string name="save_log_entry">Save Log Entry</string>
+    <string name="end_time">End Time</string>
+    <string name="second_break">Second Break</string>
+    <string name="first_break">First Break</string>
+    <string name="start_time">Start Time</string>
+    <string name="rego">Rego # :</string>
+    <string name="driver_s_name">Driver\'s name</string>
+    <string name="xxx_yyy">xxx-yyy</string>
+    <string name="return_to_car">Return to Car</string>
+    <string name="return_to_5T_truck">Return to 5T Truck</string>
+    <string name="return_to_tent_truck">Return to Tent Truck</string>
+    <string name="return_to_tipper">Return to Tipper</string>
+    <string name="return_to_articulated">Return to Articulated</string>
+    <string name="logger_username">Logger username:</string>
+    <string name="your_name">Your name?</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="cancel_profile">Cancel Profile</string>
+    <string name="password">Password:</string>
+    <string name="repeat_password">Repeat Password:</string>
+    <string name="send">Send</string>
+    <string name="save">Save</string>
+    <string name="profile">Profile</string>
+</resources>
