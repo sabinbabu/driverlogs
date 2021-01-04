@@ -52,41 +52,52 @@ public class DriverLogsLab {
 
 
     public ArrayList<DriverLogs> getVehicleLog(String key) {
-        ArrayList<DriverLogs> crimes = new ArrayList<>();
+        ArrayList<DriverLogs> driverLogs = new ArrayList<>();
 
         try (DriverLogsCursorWrapper cursor = queryLogs(
                 DriverLogsDbSchema.DriverLogsTable.Cols.VEHICLE_TYPE + " = ?",
-                new String[]{key})) {
+                new String[]{key},null)) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                crimes.add(cursor.getLogs());
+                driverLogs.add(cursor.getLogs());
                 cursor.moveToNext();
             }
         }
 
-        return crimes;
+        return driverLogs;
     }
 
     public ArrayList<DriverLogs> getAllVehicleLog() {
-        ArrayList<DriverLogs> crimes = new ArrayList<>();
+        ArrayList<DriverLogs> driverLogs = new ArrayList<>();
 
         try (DriverLogsCursorWrapper cursor = queryLogs(
-                null, null)) {
+                null, null,null)) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                crimes.add(cursor.getLogs());
+                driverLogs.add(cursor.getLogs());
                 cursor.moveToNext();
             }
         }
 
-        return crimes;
+        return driverLogs;
     }
 
     public void deleteAllLogs() {
           mDatabase.delete(DriverLogsDbSchema.DriverLogsTable.NAME,null,null);
     }
 
-    private DriverLogsCursorWrapper queryLogs(String whereClause, String[] whereArgs) {
+    public void deleteSelectedLogs() {
+        int key;
+
+        Cursor cursor = mDatabase.rawQuery("SELECT MAX(" + "_id" + ") FROM " + DriverLogsDbSchema.DriverLogsTable.NAME,null);
+        cursor.moveToFirst();
+        key = cursor.getInt(0);
+        cursor.close();
+
+        mDatabase.delete(DriverLogsDbSchema.DriverLogsTable.NAME,"_id = ?",new String[]{String.valueOf(key)});
+    }
+
+    private DriverLogsCursorWrapper queryLogs(String whereClause, String[] whereArgs, String orderBy) {
         Cursor cursor = mDatabase.query(
                 DriverLogsDbSchema.DriverLogsTable.NAME,
                 null, // columns - null selects all columns

@@ -1,7 +1,8 @@
 package com.binwin.driverlogs.Fragments;
 
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
-import com.binwin.driverlogs.DateUtil;
+import com.binwin.driverlogs.Util;
 import com.binwin.driverlogs.DriverLogs;
 import com.binwin.driverlogs.database.DriverLogsLab;
 import com.binwin.driverlogs.R;
@@ -60,7 +61,7 @@ public class BaseFragment extends Fragment {
         secondBreakButton = mView.findViewById(R.id.btn_second_break);
         endTimeButton = mView.findViewById(R.id.btn_end_time);
 
-        DateUtil getDate = new DateUtil();
+        Util getDate = new Util();
 
         startTimeButton.setOnClickListener(v -> {
             startTimeTextView.setText(String.format("Start: %s", getDate.getCurrentDate()));
@@ -106,6 +107,14 @@ public class BaseFragment extends Fragment {
 
                 DriverLogsLab.get(getActivity()).addDriverLogs(driverLogs);
 
+                //using shared Preference to store unsaved logs
+                SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (sharedPreferences.getString("unSavedValue",null)!=null){
+                editor.putString("unSavedValue",sharedPreferences.getString("unSavedValue",null)+"_1");
+                }else editor.putString("unSavedValue","1");
+                editor.apply();
+
                 Toast toast = Toast.makeText(getContext(), "Entry Saved", Toast.LENGTH_SHORT);
                 toast.show();
 
@@ -144,12 +153,32 @@ public class BaseFragment extends Fragment {
         getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setPositiveButton("Yes", (dialog, id) -> {
                     getActivity().finish();
                 });
 
                 builder.setNegativeButton("No", (dialog, id) -> {
+                    //removing the unsaved logs using shared Preferences
+                    String[] tableLengthArray  = DriverLogsLab.get(getActivity()).getAllVehicleLog().toString().split(",");
+                    Integer tableLength = tableLengthArray.length;
+
+                    SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    String sha = sharedPreferences.getString("unSavedValue",null);
+                    if (sha!=null) {
+                        String[] unSavedValueArray = sha.split("_");
+                        Integer unSavedValue = unSavedValueArray.length;
+                        
+                        int finalLength = tableLength - unSavedValue;
+
+                        for (int i = tableLength;i>finalLength;i--){
+                            DriverLogsLab.get(getActivity()).deleteSelectedLogs();
+                        }
+
+                    }
+
+                    sharedPreferences.edit().remove("unSavedValue").apply();
                     getActivity().finish();
                 });
                 AlertDialog dialog = builder.create();
