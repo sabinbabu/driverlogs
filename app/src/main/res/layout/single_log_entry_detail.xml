@@ -10,6 +10,7 @@
         android:id="@+id/driver_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         tools:text="Ron"
         />
 
@@ -17,31 +18,34 @@
         android:id="@+id/rego_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         tools:text="123and"/>
 
     <TextView
         android:id="@+id/start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         tools:text="Start 5/3/20 05:44"/>
 
     <TextView
         android:id="@+id/first_entry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         tools:text="Start 5/3/20 05:44"/>
 
     <TextView
         android:id="@+id/second_entry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         tools:text="Start 5/3/20 05:44"/>
 
     <TextView
         android:id="@+id/end_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         tools:text="Start 5/3/20 05:44"/>
-
-
 </LinearLayout>
