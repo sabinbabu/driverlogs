@@ -2,6 +2,7 @@ package com.binwin.driverlogs.Fragments;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import static com.binwin.driverlogs.AppTexts.ARTICULATED;
 import static com.binwin.driverlogs.AppTexts.CAR;
 import static com.binwin.driverlogs.AppTexts.FIVET_TRUCK;
+import static com.binwin.driverlogs.AppTexts.HOME_FRAGMENT;
 import static com.binwin.driverlogs.AppTexts.TENT_TRUCK;
 import static com.binwin.driverlogs.AppTexts.TIPPER;
 
@@ -31,7 +33,7 @@ public class LogEntryDetailFragment extends Fragment {
     RecyclerView mRecyclerView;
     ArrayList<DriverLogs> mDriverLogs = new ArrayList<>();
     LogEntryDetailAdapter logEntryDetailAdapter;
-    String returnText = "return Back";
+    String returnText = HOME_FRAGMENT;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,28 +69,7 @@ public class LogEntryDetailFragment extends Fragment {
         }
 
         returnButton.setOnClickListener(v -> {
-            switch (returnText) {
-                case CAR:
-                    CarFragment carFragment = new CarFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,carFragment,"carFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
-                    break;
-                case FIVET_TRUCK:
-                    FivetTruckFragment fivetFragment = new FivetTruckFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fivetFragment,"fivetFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
-                    break;
-                case TENT_TRUCK:
-                    TentTruckFragment tentFragment = new TentTruckFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tentFragment,"tentFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
-                    break;
-                case TIPPER:
-                    TipperFragment tipperFragment = new TipperFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tipperFragment,"tipperFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
-                    break;
-                case ARTICULATED:
-                    ArticulatedFragment articulatedFragment = new ArticulatedFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,articulatedFragment,"articulatedFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
-                    break;
-            }
+           returnCase(returnText);
         });
 
 
@@ -114,7 +95,38 @@ public class LogEntryDetailFragment extends Fragment {
 
         setupAdapter();
 
+        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+               returnCase(returnText); }
+        });
+
         return mView;
+    }
+
+    private void returnCase(String returnText) {
+        switch (returnText) {
+            case CAR:
+                CarFragment carFragment = new CarFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,carFragment,"carFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
+                break;
+            case FIVET_TRUCK:
+                FivetTruckFragment fivetFragment = new FivetTruckFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fivetFragment,"fivetFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
+                break;
+            case TENT_TRUCK:
+                TentTruckFragment tentFragment = new TentTruckFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tentFragment,"tentFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
+                break;
+            case TIPPER:
+                TipperFragment tipperFragment = new TipperFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tipperFragment,"tipperFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
+                break;
+            case ARTICULATED:
+                ArticulatedFragment articulatedFragment = new ArticulatedFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,articulatedFragment,"articulatedFragment").remove(LogEntryDetailFragment.this).addToBackStack(null).commit();
+                break;
+        }
     }
 
     void setupAdapter(){
@@ -128,4 +140,5 @@ public class LogEntryDetailFragment extends Fragment {
             mRecyclerView.setAdapter(null);
         }
     }
+
 }

@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.binwin.driverlogs.AppTexts.HOME_FRAGMENT;
+
 public class DriverLogsActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment()
@@ -39,6 +41,11 @@ public class DriverLogsActivity extends SingleFragmentActivity {
         inflater.inflate(R.menu.menu,menu);
 
         SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+
+        //loading array list values from SQLite Database
+        ArrayList<DriverLogs> storedLogs =  DriverLogsLab.get(this).getAllVehicleLog();
+        sharedPreferences.edit().putString("storedLogs",storedLogs.toString()).apply();
+
         sharedPreferences.edit().remove("unSavedValue").apply();
         return true;
     }
@@ -51,6 +58,8 @@ public class DriverLogsActivity extends SingleFragmentActivity {
                 builder.setPositiveButton("ok", (dialog, id) -> {
                  sendEmail();
                  DriverLogsLab.get(this).deleteAllLogs();
+                 SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+                 sharedPreferences.edit().remove("unSavedValue").apply();
                 });
 
                 builder.setNegativeButton("cancel", (dialog, id) -> {
@@ -65,7 +74,13 @@ public class DriverLogsActivity extends SingleFragmentActivity {
             case R.id.menu_item_save:
                 Toast toast = Toast.makeText(this, "Entries saved to database", Toast.LENGTH_SHORT);
                 toast.show();
-                 return true;
+
+                SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+                sharedPreferences.edit().remove("unSavedValue").apply();
+
+                HomeFragment homeFragment = new HomeFragment();
+                this.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, HOME_FRAGMENT).addToBackStack(null).commit();
+                return true;
             case R.id.menu_item_profile:
                 ProfileFragment profileFragment = new ProfileFragment();
                 this.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,profileFragment,"carFragment").addToBackStack(null).commit();
@@ -79,7 +94,7 @@ public class DriverLogsActivity extends SingleFragmentActivity {
         SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("username",null);
         if (userName==null){
-            userName = " ";
+            userName = "recipient";
         }
         String finalUsername = userName;
 
@@ -87,7 +102,7 @@ public class DriverLogsActivity extends SingleFragmentActivity {
 
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@cqu.edu.au"});
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{finalUsername+"@cqu.edu.au"});
         i.putExtra(Intent.EXTRA_CC, new String[]{"recipient@cqu.edu.au"});
         i.putExtra(Intent.EXTRA_SUBJECT,  "New logger data");
         i.putExtra(Intent.EXTRA_TEXT   , finalUsername+"\n"+driverLogsDetail.toString().replace(",","").replace("[","").replace("]",""));

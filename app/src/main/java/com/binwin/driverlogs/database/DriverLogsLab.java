@@ -56,7 +56,7 @@ public class DriverLogsLab {
 
         try (DriverLogsCursorWrapper cursor = queryLogs(
                 DriverLogsDbSchema.DriverLogsTable.Cols.VEHICLE_TYPE + " = ?",
-                new String[]{key},null)) {
+                new String[]{key})) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 driverLogs.add(cursor.getLogs());
@@ -71,7 +71,7 @@ public class DriverLogsLab {
         ArrayList<DriverLogs> driverLogs = new ArrayList<>();
 
         try (DriverLogsCursorWrapper cursor = queryLogs(
-                null, null,null)) {
+                null, null)) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 driverLogs.add(cursor.getLogs());
@@ -97,7 +97,7 @@ public class DriverLogsLab {
         mDatabase.delete(DriverLogsDbSchema.DriverLogsTable.NAME,"_id = ?",new String[]{String.valueOf(key)});
     }
 
-    private DriverLogsCursorWrapper queryLogs(String whereClause, String[] whereArgs, String orderBy) {
+    private DriverLogsCursorWrapper queryLogs(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 DriverLogsDbSchema.DriverLogsTable.NAME,
                 null, // columns - null selects all columns

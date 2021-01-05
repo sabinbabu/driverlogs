@@ -160,26 +160,29 @@ public class BaseFragment extends Fragment {
                 });
 
                 builder.setNegativeButton("No", (dialog, id) -> {
-                    //removing the unsaved logs using shared Preferences
-                    String[] tableLengthArray  = DriverLogsLab.get(getActivity()).getAllVehicleLog().toString().split(",");
-                    Integer tableLength = tableLengthArray.length;
+                    try {
+                        //removing the unsaved logs using shared Preferences
+                        String[] tableLengthArray  = DriverLogsLab.get(getActivity()).getAllVehicleLog().toString().split(",");
+                        Integer tableLength = tableLengthArray.length;
 
-                    SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    String sha = sharedPreferences.getString("unSavedValue",null);
-                    if (sha!=null) {
-                        String[] unSavedValueArray = sha.split("_");
-                        Integer unSavedValue = unSavedValueArray.length;
-                        
-                        int finalLength = tableLength - unSavedValue;
+                        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                        String sha = sharedPreferences.getString("unSavedValue",null);
+                        if (sha!=null) {
+                            String[] unSavedValueArray = sha.split("_");
+                            Integer unSavedValue = unSavedValueArray.length;
 
-                        for (int i = tableLength;i>finalLength;i--){
-                            DriverLogsLab.get(getActivity()).deleteSelectedLogs();
+                            int finalLength = tableLength - unSavedValue;
+
+                            for (int i = tableLength;i>finalLength;i--){
+                                DriverLogsLab.get(getActivity()).deleteSelectedLogs();
+                            }
+
                         }
 
-                    }
+                        sharedPreferences.edit().remove("unSavedValue").apply();
+                        getActivity().finish();
+                    }catch (Exception e){e.getMessage();}
 
-                    sharedPreferences.edit().remove("unSavedValue").apply();
-                    getActivity().finish();
                 });
                 AlertDialog dialog = builder.create();
                 dialog.setTitle("Save entries to DB first?");
