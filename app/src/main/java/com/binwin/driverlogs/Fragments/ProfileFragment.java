@@ -26,10 +26,11 @@ import java.util.Objects;
 
 import static com.binwin.driverlogs.AppTexts.HOME_FRAGMENT;
 
+//this fragment stores user name, password
 public class ProfileFragment extends Fragment {
 
-    EditText userName, password, repeatPassword;
-    Button saveProfile, cancelProfile;
+    EditText userName, password, repeatPassword; //edit text variables
+    Button saveProfile, cancelProfile; //button variables
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class ProfileFragment extends Fragment {
         saveProfile = mView.findViewById(R.id.save_profile_btn);
         cancelProfile = mView.findViewById(R.id.cancel_profile_button);
 
+        //checking for repeat password validation
         repeatPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
@@ -66,7 +68,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //save button click action handler
         saveProfile.setOnClickListener(v -> {
+            //validation
             if (userName.getText().toString().trim().length() != 0 && password.getText().toString().trim().length() != 0 &&  repeatPassword.getText().toString().trim().length() != 0 && password.getText().toString().trim().equals(repeatPassword.getText().toString().trim())){
                 //The details are saved , thus can be used later for authentication purpose
                 SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -74,7 +78,7 @@ public class ProfileFragment extends Fragment {
                 editor.putString("username",userName.getText().toString().trim());
                 editor.putString("password",password.getText().toString().trim());
                 editor.apply();
-
+                //navigates to home
                 sendToHome();
             }else{
                 Toast toast = Toast.makeText(getContext(), "Entry not saved as not all data entered. Complete all entries and try again.", Toast.LENGTH_SHORT);
@@ -82,10 +86,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //cancel button click action handler
         cancelProfile.setOnClickListener(v->{
+            //navigates to home
             sendToHome();
         });
 
+        //on back pressed event handler
         getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -95,6 +102,7 @@ public class ProfileFragment extends Fragment {
         return mView;
     }
 
+    //navigates to home
     private void sendToHome() {
         HomeFragment homeFragment = new HomeFragment();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, HOME_FRAGMENT).remove(ProfileFragment.this).addToBackStack(null).commit();

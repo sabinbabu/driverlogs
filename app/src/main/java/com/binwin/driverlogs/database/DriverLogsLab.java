@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.binwin.driverlogs.DriverLogs;
 
 import java.util.ArrayList;
-
+//contains necessary queries for data operation
 public class DriverLogsLab {
     private static DriverLogsLab sDriverLogsLab;
     private Context mContext;

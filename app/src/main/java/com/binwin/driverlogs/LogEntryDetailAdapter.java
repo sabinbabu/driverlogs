@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+//populates the recycler view
 public class LogEntryDetailAdapter extends RecyclerView.Adapter<LogEntryDetailAdapter.LogEntryDetailViewHolder> {
 
-    private final ArrayList<DriverLogs> items;
-    private  TextView driverName, regoNumber, startTime, firstEntry, secondEntry, endTime;
+    private final ArrayList<DriverLogs> items; //logger data
+    private  TextView driverName, regoNumber, startTime, firstEntry, secondEntry, endTime; //view items
 
     public LogEntryDetailAdapter(Context context, ArrayList<DriverLogs> items) {
         this.items = items;
@@ -42,7 +43,7 @@ public class LogEntryDetailAdapter extends RecyclerView.Adapter<LogEntryDetailAd
         public LogEntryDetailViewHolder(View view) {
             super(view);
         }
-
+        //populates items in the view
         public final void bind(DriverLogs item) {
             driverName = itemView.findViewById(R.id.driver_name);
             regoNumber = itemView.findViewById(R.id.rego_number);

@@ -1,5 +1,6 @@
 package com.binwin.driverlogs.database;
 
+//database schema
 public class DriverLogsDbSchema {
     public static final class DriverLogsTable {
         public static final String NAME = "driverLogs";

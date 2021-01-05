@@ -7,7 +7,7 @@ import com.binwin.driverlogs.DriverLogs;
 import com.binwin.driverlogs.database.DriverLogsDbSchema.DriverLogsTable;
 
 import java.util.UUID;
-
+//cursor wrapper class
 public class DriverLogsCursorWrapper extends CursorWrapper {
     public DriverLogsCursorWrapper(Cursor cursor){super(cursor);}
     public DriverLogs getLogs(){

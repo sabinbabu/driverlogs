@@ -1,7 +1,7 @@
 package com.binwin.driverlogs;
 
 import java.util.UUID;
-
+//data class
 public class DriverLogs {
     private UUID mId;
     private String mVehicleType;

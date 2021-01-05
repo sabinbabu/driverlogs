@@ -1,5 +1,5 @@
 package com.binwin.driverlogs;
-
+//variables used throughout project
 public class AppTexts {
     public static final String CAR = "CAR";
     public static final String FIVET_TRUCK = "5T TRUCK";

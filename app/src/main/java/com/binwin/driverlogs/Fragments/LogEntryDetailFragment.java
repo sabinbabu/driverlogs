@@ -26,14 +26,14 @@ import static com.binwin.driverlogs.AppTexts.HOME_FRAGMENT;
 import static com.binwin.driverlogs.AppTexts.TENT_TRUCK;
 import static com.binwin.driverlogs.AppTexts.TIPPER;
 
-
+//this fragment displays details of driver logs from specific vehicle
 public class LogEntryDetailFragment extends Fragment {
     View mView;
     Button returnButton;
     RecyclerView mRecyclerView;
     ArrayList<DriverLogs> mDriverLogs = new ArrayList<>();
     LogEntryDetailAdapter logEntryDetailAdapter;
-    String returnText = HOME_FRAGMENT;
+    String returnText = HOME_FRAGMENT; //variable for finding current fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +46,12 @@ public class LogEntryDetailFragment extends Fragment {
         returnButton = (Button) mView.findViewById(R.id.return_button);
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.recycler_view);
 
+        //gets the argument from the previous fragment
         if (getArguments().getString("sourceFragment")!=null){
             this.returnText = getArguments().getString("sourceFragment");
         }
 
+        //sets the button text
         switch (returnText) {
             case CAR:
                 returnButton.setText(R.string.return_to_car);
@@ -68,11 +70,12 @@ public class LogEntryDetailFragment extends Fragment {
                 break;
         }
 
+        //return button click event handler
         returnButton.setOnClickListener(v -> {
            returnCase(returnText);
         });
 
-
+        //fetches the data of specific vehicle
         DriverLogsLab driverLogsLab = new DriverLogsLab(getActivity());
 
         switch (returnText) {
@@ -92,13 +95,14 @@ public class LogEntryDetailFragment extends Fragment {
                 this.mDriverLogs = driverLogsLab.getVehicleLog(ARTICULATED);
                 break;
         }
-
+        //sets up recycler adapter
         setupAdapter();
 
+       //on back pressed event handler
         getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-               returnCase(returnText); }
+               returnCase(returnText); } //navigates to specific fragment
         });
 
         return mView;

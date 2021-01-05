@@ -27,14 +27,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.binwin.driverlogs.AppTexts.HOME_FRAGMENT;
-
+//main activity if the project
 public class DriverLogsActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment()
     {
         return new HomeFragment();
     }
-
+    //creates a menu item
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -45,7 +45,7 @@ public class DriverLogsActivity extends SingleFragmentActivity {
         //loading array list values from SQLite Database
         ArrayList<DriverLogs> storedLogs =  DriverLogsLab.get(this).getAllVehicleLog();
         sharedPreferences.edit().putString("storedLogs",storedLogs.toString()).apply();
-
+        //remove unsaved data for preference
         sharedPreferences.edit().remove("unSavedValue").apply();
         return true;
     }
@@ -56,8 +56,9 @@ public class DriverLogsActivity extends SingleFragmentActivity {
             case R.id.menu_item_send:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setPositiveButton("ok", (dialog, id) -> {
-                 sendEmail();
-                 DriverLogsLab.get(this).deleteAllLogs();
+                 sendEmail(); //sends email containing log details
+                 DriverLogsLab.get(this).deleteAllLogs(); //remove all the logs from database
+                    //remove data from local variables (except database)
                  SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
                  sharedPreferences.edit().remove("unSavedValue").apply();
                 });
@@ -74,14 +75,15 @@ public class DriverLogsActivity extends SingleFragmentActivity {
             case R.id.menu_item_save:
                 Toast toast = Toast.makeText(this, "Entries saved to database", Toast.LENGTH_SHORT);
                 toast.show();
-
+                //remove data from local variables (except database)
                 SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
                 sharedPreferences.edit().remove("unSavedValue").apply();
-
+                //navigate to home fragment
                 HomeFragment homeFragment = new HomeFragment();
                 this.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, HOME_FRAGMENT).addToBackStack(null).commit();
                 return true;
             case R.id.menu_item_profile:
+                //navigate to profile fragment
                 ProfileFragment profileFragment = new ProfileFragment();
                 this.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,profileFragment,"carFragment").addToBackStack(null).commit();
                 return true;
@@ -91,15 +93,16 @@ public class DriverLogsActivity extends SingleFragmentActivity {
     }
 
     private void sendEmail() {
+        //gets profile name
         SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("username",null);
         if (userName==null){
             userName = "recipient";
         }
         String finalUsername = userName;
-
+        //gets all logs details
         ArrayList<DriverLogs> driverLogsDetail = DriverLogsLab.get(this).getAllVehicleLog();
-
+        //open email app
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{finalUsername+"@cqu.edu.au"});

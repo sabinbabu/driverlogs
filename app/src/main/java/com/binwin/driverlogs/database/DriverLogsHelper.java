@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.binwin.driverlogs.database.DriverLogsDbSchema.DriverLogsTable;
 
+//database helper class
 public class DriverLogsHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;

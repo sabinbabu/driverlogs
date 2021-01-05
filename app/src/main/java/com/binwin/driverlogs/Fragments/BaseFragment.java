@@ -15,14 +15,15 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
-import com.binwin.driverlogs.Util;
 import com.binwin.driverlogs.DriverLogs;
-import com.binwin.driverlogs.database.DriverLogsLab;
 import com.binwin.driverlogs.R;
+import com.binwin.driverlogs.Util;
+import com.binwin.driverlogs.database.DriverLogsLab;
 
 import static com.binwin.driverlogs.AppTexts.HOME_FRAGMENT;
 import static com.binwin.driverlogs.AppTexts.LOG_ENTRY_FRAGMENT;
 
+//this fragment handles click events, saving data and displaying data
 public class BaseFragment extends Fragment {
     View mView;
     TextView mTitleText, startTimeTextView, firstBreakTextView, secondBreakTextView, endTimeTextView;
@@ -62,39 +63,46 @@ public class BaseFragment extends Fragment {
         endTimeButton = mView.findViewById(R.id.btn_end_time);
 
         Util getDate = new Util();
-
+        //start time button click handler
         startTimeButton.setOnClickListener(v -> {
             startTimeTextView.setText(String.format("Start: %s", getDate.getCurrentDate()));
+            //controls visibility
             startTimeTextView.setVisibility(View.VISIBLE);
             startTimeButton.setVisibility(View.INVISIBLE);
             firstBreakButton.setVisibility(View.VISIBLE);
         });
-
+        //first break button click handler
         firstBreakButton.setOnClickListener(v -> {
             firstBreakTextView.setText(String.format("1st Break: %s", getDate.getCurrentDate()));
+            //controls visibility
             firstBreakTextView.setVisibility(View.VISIBLE);
             firstBreakButton.setVisibility(View.INVISIBLE);
             secondBreakButton.setVisibility(View.VISIBLE);
         });
 
+        //second break button click handler
         secondBreakButton.setOnClickListener(v -> {
             secondBreakTextView.setText(String.format("2nd Break: %s", getDate.getCurrentDate()));
+            //controls visibility
             secondBreakTextView.setVisibility(View.VISIBLE);
             secondBreakButton.setVisibility(View.INVISIBLE);
             endTimeButton.setVisibility(View.VISIBLE);
         });
 
+        //end time button click handler
         endTimeButton.setOnClickListener(v -> {
             endTimeTextView.setText(String.format("End: %s", getDate.getCurrentDate()));
+            //controls visibility
             endTimeTextView.setVisibility(View.VISIBLE);
             endTimeButton.setVisibility(View.INVISIBLE);
         });
         return mView;
     }
 
+    //save button click event handler
     public void saveLogEntryAction(String vehicleType) {
         saveLogEntry.setOnClickListener(v -> {
-
+            //validation
             if (driverNameEditText.getText().toString().trim().length() != 0 && regoEditText.getText().toString().trim().length() != 0 && endTimeTextView.isShown()) {
                 DriverLogs driverLogs = new DriverLogs();
                 driverLogs.setmVehicleType(vehicleType);
@@ -104,20 +112,20 @@ public class BaseFragment extends Fragment {
                 driverLogs.setmFirstBreak(firstBreakTextView.getText().toString());
                 driverLogs.setmSecondBreak(secondBreakTextView.getText().toString());
                 driverLogs.setmEndTime(endTimeTextView.getText().toString());
-
+                //storing the data
                 DriverLogsLab.get(getActivity()).addDriverLogs(driverLogs);
 
                 //using shared Preference to store unsaved logs
                 SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (sharedPreferences.getString("unSavedValue",null)!=null){
-                editor.putString("unSavedValue",sharedPreferences.getString("unSavedValue",null)+"_1");
-                }else editor.putString("unSavedValue","1");
+                if (sharedPreferences.getString("unSavedValue", null) != null) {
+                    editor.putString("unSavedValue", sharedPreferences.getString("unSavedValue", null) + "_1");
+                } else editor.putString("unSavedValue", "1");
                 editor.apply();
 
                 Toast toast = Toast.makeText(getContext(), "Entry Saved", Toast.LENGTH_SHORT);
                 toast.show();
-
+                //clearing the text fields and views
                 driverNameEditText.getText().clear();
                 regoEditText.getText().clear();
                 endTimeTextView.setVisibility(View.INVISIBLE);
@@ -132,8 +140,10 @@ public class BaseFragment extends Fragment {
         });
     }
 
+    //show Log entry button click event handler
     public void showLogEntryAction(Fragment currentFragment, String sourceFragment) {
         showLogEntry.setOnClickListener(v -> {
+            //navigates to log entry details
             LogEntryDetailFragment logEntryDetailFragment = new LogEntryDetailFragment();
             Bundle argument = new Bundle();
             argument.putString("sourceFragment", sourceFragment);
@@ -142,18 +152,21 @@ public class BaseFragment extends Fragment {
         });
     }
 
+    //home button click event handler
     public void homeButtonAction(Fragment currentFragment) {
         homeButton.setOnClickListener(v -> {
+            //navigates to home
             HomeFragment homeFragment = new HomeFragment();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, HOME_FRAGMENT).remove(currentFragment).addToBackStack(null).commit();
         });
     }
 
+    //on back pressed event handler
     public void onBackPressedAction() {
         getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-
+                //builds a dialog box
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setPositiveButton("Yes", (dialog, id) -> {
                     getActivity().finish();
@@ -162,18 +175,18 @@ public class BaseFragment extends Fragment {
                 builder.setNegativeButton("No", (dialog, id) -> {
                     try {
                         //removing the unsaved logs using shared Preferences
-                        String[] tableLengthArray  = DriverLogsLab.get(getActivity()).getAllVehicleLog().toString().split(",");
+                        String[] tableLengthArray = DriverLogsLab.get(getActivity()).getAllVehicleLog().toString().split(",");
                         Integer tableLength = tableLengthArray.length;
 
                         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-                        String sha = sharedPreferences.getString("unSavedValue",null);
-                        if (sha!=null) {
+                        String sha = sharedPreferences.getString("unSavedValue", null);
+                        if (sha != null) {
                             String[] unSavedValueArray = sha.split("_");
                             Integer unSavedValue = unSavedValueArray.length;
 
                             int finalLength = tableLength - unSavedValue;
 
-                            for (int i = tableLength;i>finalLength;i--){
+                            for (int i = tableLength; i > finalLength; i--) {
                                 DriverLogsLab.get(getActivity()).deleteSelectedLogs();
                             }
 
@@ -181,7 +194,9 @@ public class BaseFragment extends Fragment {
 
                         sharedPreferences.edit().remove("unSavedValue").apply();
                         getActivity().finish();
-                    }catch (Exception e){e.getMessage();}
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
 
                 });
                 AlertDialog dialog = builder.create();
